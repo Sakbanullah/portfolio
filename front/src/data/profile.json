@@ -1,0 +1,24 @@
+{
+  "name": "Ren Aizawa",
+  "role": "Backend Developer",
+  "targetRole": "Full Stack Developer",
+  "tagline": "I build quiet, dependable services — and I'm learning to shape the interface in front of them.",
+  "availability": "Open to work",
+  "location": "Jakarta, Indonesia",
+  "email": "ren.aizawa@example.com",
+  "kanji": "深",
+  "socials": [
+    { "label": "GitHub", "href": "https://github.com/example-dev" },
+    { "label": "LinkedIn", "href": "https://linkedin.com/in/example-dev" }
+  ],
+  "about": [
+    "I'm a backend developer with four years of experience designing APIs, data models, and background processing for fintech and e-commerce products. I care about clear contracts, boring reliability, and leaving fewer moving parts behind than I found.",
+    "These days I'm working through the other half of the stack — React, CSS systems, and interaction design — so I can carry a feature from the database row all the way to the button that changes it."
+  ],
+  "facts": [
+    { "label": "Based in", "value": "Jakarta" },
+    { "label": "Focus", "value": "APIs, distributed systems" },
+    { "label": "Now learning", "value": "React & interface design" },
+    { "label": "Off-screen", "value": "Kyudo, tea, long walks" }
+  ]
+}

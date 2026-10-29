@@ -1,0 +1,31 @@
+[
+  {
+    "title": "Payments Webhook Service",
+    "summary": "Idempotent webhook receiver for a lending platform: signature verification, deduplication, and retry with backoff. Processes millions of events daily without duplicate ledger entries.",
+    "stack": ["Go", "PostgreSQL", "Kafka"],
+    "featured": true,
+    "size": { "col": 2, "row": 2 },
+    "links": { "repo": "https://github.com/example-dev/webhooks", "demo": "" }
+  },
+  {
+    "title": "API Gateway Rate Limiter",
+    "summary": "Sliding-window rate limiter middleware backed by Redis, with per-tenant quotas and clear 429 responses.",
+    "stack": ["Node.js", "Redis"],
+    "size": { "col": 1, "row": 1 },
+    "links": { "repo": "https://github.com/example-dev/rate-limiter", "demo": "" }
+  },
+  {
+    "title": "Job Queue Worker",
+    "summary": "Celery worker setup for image processing and report generation, with per-queue concurrency and dead-letter handling.",
+    "stack": ["Python", "Celery", "RabbitMQ"],
+    "size": { "col": 2, "row": 1 },
+    "links": { "repo": "https://github.com/example-dev/job-worker", "demo": "" }
+  },
+  {
+    "title": "Inventory REST API",
+    "summary": "Spring Boot inventory service with optimistic locking, stock reservations, and OpenAPI documentation.",
+    "stack": ["Java", "Spring Boot", "PostgreSQL"],
+    "size": { "col": 1, "row": 2 },
+    "links": { "repo": "https://github.com/example-dev/inventory-api", "demo": "" }
+  }
+]

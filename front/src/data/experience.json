@@ -1,0 +1,37 @@
+[
+  {
+    "role": "Backend Engineer",
+    "company": "Saku Finance",
+    "period": "2023 — Present",
+    "summary": "Payments and ledgers for a digital lending product.",
+    "bullets": [
+      "Designed an idempotent webhook pipeline that handles ~2M payment events per day with zero duplicate postings.",
+      "Cut ledger query latency by 70% by restructuring indexes and moving reporting reads to a read replica.",
+      "Introduced contract tests between three services, reducing integration regressions before release."
+    ],
+    "stack": ["Go", "PostgreSQL", "Kafka", "Redis"]
+  },
+  {
+    "role": "Backend Developer",
+    "company": "Kite Studio",
+    "period": "2021 — 2023",
+    "summary": "Client APIs for e-commerce and logistics clients.",
+    "bullets": [
+      "Built REST APIs in Node.js for six client projects, from scaffold to deployment.",
+      "Replaced a nightly cron report with a queue-based worker, shortening reporting delay from 12 hours to minutes.",
+      "Wrote the deployment playbook the team still uses for new services."
+    ],
+    "stack": ["Node.js", "Express", "MongoDB", "Docker"]
+  },
+  {
+    "role": "Software Engineer Intern",
+    "company": "Hana Labs",
+    "period": "2020 — 2021",
+    "summary": "Internal tooling and early API work.",
+    "bullets": [
+      "Built an internal admin dashboard API in Spring Boot used daily by the operations team.",
+      "Automated database seed and backup scripts that removed a manual release step."
+    ],
+    "stack": ["Java", "Spring Boot", "MySQL"]
+  }
+]

@@ -1,0 +1,38 @@
+# ── Lampiran root (menutupi file di semua subfolder) ─────────────────────────
+
+# Dependensi & artefak build
+**/node_modules/
+**/dist/
+**/coverage/
+
+# Log & file sementara
+*.log
+*.tmp
+*.temp
+
+# Environment / rahasia (template .env.example tetap di-track)
+.env
+.env.*
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.example.*
+
+# AI coding tools — konfigurasi & output lokal
+**/.claude/
+CLAUDE.local.md
+**/.opencode/
+**/.cursor/
+**/.windsurf/
+**/.continue/
+.aider*
+**/.aider*
+graphify-out/
+AGENT.md
+
+# OS & editor
+**/.DS_Store
+**/Thumbs.db
+**/.idea/
+**/.vscode/*
+!**/.vscode/extensions.json
