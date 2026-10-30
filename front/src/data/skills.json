@@ -2,41 +2,21 @@
   {
     "category": "Languages",
     "kanji": "言",
-    "items": [
-      { "name": "Go", "level": 90 },
-      { "name": "Node.js / JavaScript", "level": 80 },
-      { "name": "Python", "level": 75 },
-      { "name": "Java", "level": 70 }
-    ]
+    "items": [{ "name": "Go" }, { "name": "Node.js / JavaScript" }, { "name": "Python" }, { "name": "Java" }]
   },
   {
     "category": "Frameworks",
     "kanji": "構",
-    "items": [
-      { "name": "Express / Fastify", "level": 80 },
-      { "name": "Spring Boot", "level": 70 },
-      { "name": "Celery", "level": 70 },
-      { "name": "React", "level": 45 }
-    ]
+    "items": [{ "name": "Express / Fastify" }, { "name": "Spring Boot" }, { "name": "Celery" }, { "name": "React" }]
   },
   {
     "category": "Databases",
     "kanji": "蔵",
-    "items": [
-      { "name": "PostgreSQL", "level": 85 },
-      { "name": "Redis", "level": 80 },
-      { "name": "MongoDB", "level": 65 },
-      { "name": "MySQL", "level": 70 }
-    ]
+    "items": [{ "name": "PostgreSQL" }, { "name": "Redis" }, { "name": "MongoDB" }, { "name": "MySQL" }]
   },
   {
     "category": "DevOps & Tools",
     "kanji": "器",
-    "items": [
-      { "name": "Docker", "level": 80 },
-      { "name": "GitHub Actions", "level": 70 },
-      { "name": "Kafka", "level": 65 },
-      { "name": "Linux / Bash", "level": 75 }
-    ]
+    "items": [{ "name": "Docker" }, { "name": "GitHub Actions" }, { "name": "Kafka" }, { "name": "Linux / Bash" }]
   }
 ]

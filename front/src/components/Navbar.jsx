@@ -17,25 +17,28 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-sumi/10 bg-washi/80 backdrop-blur-md">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <a href="#top" className="font-display text-lg font-semibold tracking-tight">
+      {/* Baris atas: nama, badge, toggle tema, hamburger. Maks 2 level: nama di kiri, kontrol di kanan. */}
+      <nav
+        aria-label="Main"
+        className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-6"
+      >
+        <a
+          aria-label={profile.name}
+          href="#top"
+          onClick={() => setOpen(false)}
+          className="min-w-0 truncate font-display text-base font-semibold tracking-tight sm:text-lg"
+        >
           {profile.name}
         </a>
 
-        <div className="flex items-center gap-5">
-          <ul className="hidden items-center gap-5 text-sm md:flex">
-            {LINKS.map((l) => (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  className="text-sumi/70 transition-colors hover:text-vermilion"
-                >
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <Stamp glyph="職" label={profile.availability} className="hidden sm:inline-flex" />
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          {/* Badge ketersediaan: glyph saja di bawah sm; teksnya tetap ada untuk pembaca layar */}
+          <Stamp
+            glyph="職"
+            label={profile.availability}
+            className="hidden min-[480px]:inline-flex"
+            labelClassName="hidden sm:inline"
+          />
           <ThemeToggle />
           <button
             type="button"
@@ -43,12 +46,23 @@ export default function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label="Toggle menu"
-            className="grid size-9 place-items-center rounded-full ring-1 ring-sumi/20 md:hidden"
+            className="grid size-9 shrink-0 place-items-center border border-sumi/25 transition hover:bg-sumi/5 active:scale-95  md:hidden"
           >
             <span aria-hidden="true">{open ? '✕' : '☰'}</span>
           </button>
         </div>
       </nav>
+
+      {/* Tablet & desktop: link horizontal di baris kedua; wrap natural, tidak pernah tumpang tindih */}
+      <ul className="mx-auto hidden max-w-6xl flex-wrap items-center gap-x-6 gap-y-1 px-4 pb-3 text-sm sm:px-6 md:flex">
+        {LINKS.map((l) => (
+          <li key={l.href}>
+            <a href={l.href} className="text-sumi/70 transition-colors hover:text-vermilion">
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
 
       <AnimatePresence>
         {open && (

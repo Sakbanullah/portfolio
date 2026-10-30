@@ -1,44 +1,67 @@
-@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Shippori+Mincho:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
 @import 'tailwindcss';
+@import 'lenis/dist/lenis.css';
+
+/* Layar sangat sempit (≤ 380px): navbar tidak muat dengan label lengkap. */
+@custom-variant xs (@media (width >= 380px));
 
 /* Dark mode berbasis class pada <html> (di-set oleh useTheme / script anti-flash). */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Palet sumi-e: tinta hitam, kertas xuan krem, aksen cinnabar. Emas hanya detail kecil. */
 @theme {
-  --color-washi: #f3ece0;
-  --color-paper: #faf6ee;
-  --color-sumi: #1c1a17;
-  --color-vermilion: #c8342b;
-  --color-kin: #a8853f;
-  --color-matsu: #2f4b3f;
-  --font-display: 'Shippori Mincho', 'Noto Serif JP', serif;
+  --color-washi: #efe6d5;
+  --color-paper: #f8f3e8;
+  --color-sumi: #211d19;
+  --color-vermilion: #b3342a;
+  --color-kin: #9a7b3f;
+  --color-matsu: #3a4f45;
+  /* Kanji/judul vertikal: Mincho dulu (glyph CJK lengkap), serif SC sebagai cadangan. */
+  --font-display: 'Shippori Mincho', 'Noto Serif SC', 'Noto Serif JP', serif;
   --font-body: 'Inter', system-ui, sans-serif;
 }
 
-/* Warna mode gelap: tinta pekat, aksen emas & merah yang dibangkitkan sedikit. */
+/* Mode gelap: kertas hitam kebiruan, tinta krem, emas dibangkitkan. Bukan invers. */
 .dark {
-  --color-washi: #15130f;
-  --color-paper: #1e1b16;
-  --color-sumi: #ece5d6;
-  --color-vermilion: #e0483c;
-  --color-kin: #c9a24c;
-  --color-matsu: #7fa08d;
+  --color-washi: #12161c;
+  --color-paper: #1a2029;
+  --color-sumi: #e7dfcc;
+  --color-vermilion: #c8503f;
+  --color-kin: #c3a25e;
+  --color-matsu: #86a695;
 }
 
 @layer base {
   html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 5rem; /* offset navbar sticky */
+    scroll-behavior: smooth; /* anchor saat JS mati; saat Lenis aktif class .lenis-smooth mematikannya */
+    /* offset anchor dihitung di useSmoothScroll dari tinggi navbar sebenarnya */
   }
   body {
     background-color: var(--color-washi);
     color: var(--color-sumi);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: clip;
+    /* Serat kertas xuan: satu noise SVG (fractalNoise) ber-blend multiply/soft-light.
+       Ukuran tile 160px, tidak ada file gambar. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.13 0 0 0 0 0.11 0 0 0 0 0.09 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"),
+      linear-gradient(100deg, rgb(0 0 0 / 0.025), transparent 30%, rgb(0 0 0 / 0.02) 60%, transparent);
+    background-attachment: fixed;
+    background-blend-mode: multiply, normal;
+  }
+  /* Noise hitam tidak terlihat di kertas gelap → layar (screen) memunculkan serat krem. */
+  .dark body {
+    background-blend-mode: screen, normal;
   }
   ::selection {
     background: var(--color-vermilion);
     color: var(--color-paper);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-vermilion);
+    outline-offset: 2px;
   }
   @media (prefers-reduced-motion: reduce) {
     html {
@@ -47,19 +70,90 @@
   }
 }
 
-/* Tekstur seigaiha (gelombang) tipis untuk latar Hero. */
-.seigaiha {
-  background-image: radial-gradient(
-      circle at 50% 100%,
-      transparent 47%,
-      color-mix(in srgb, var(--color-sumi) 9%, transparent) 48%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 50% 100%,
-      transparent 30%,
-      color-mix(in srgb, var(--color-sumi) 7%, transparent) 31%,
-      transparent 33%
-    );
-  background-size: 48px 24px;
+@layer components {
+  /* Potongan kertas: bingkai tipis + bayangan sangat lembut, tanpa sudut bulat SaaS. */
+  .paper-cut {
+    background-color: var(--color-paper);
+    box-shadow:
+      0 1px 0 rgb(0 0 0 / 0.05),
+      0 14px 30px -26px rgb(0 0 0 / 0.45);
+  }
+  /* Judul vertikal (writing-mode): huruf latin diputar 90°, kanji tetap tegak. */
+  .vertical-title,
+  .vertical-title * {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+  /* Cap tangan (hanko): kotak cinnabar miring dengan tepi tidak rata. */
+  .hanko {
+    background-color: var(--color-vermilion);
+    color: var(--color-paper);
+    border-radius: 42% 58% 45% 55% / 55% 45% 58% 42%;
+  }
+}
+
+/* Batang gulungan (roller) atas & bawah halaman. */
+.roller {
+  height: 14px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-sumi) 30%, var(--color-paper)),
+    var(--color-kin) 12%,
+    color-mix(in srgb, var(--color-kin) 55%, var(--color-paper)) 55%,
+    color-mix(in srgb, var(--color-sumi) 22%, var(--color-paper))
+  );
+  box-shadow: 0 6px 10px -8px rgb(0 0 0 / 0.6);
+}
+
+/* Bab 1 dibuka sekali saat halaman dimuat ("gulungan terbuka"). clip-path (bukan tinggi)
+   supaya tata letak di bawahnya tidak bergeser. */
+@keyframes unroll {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.hero-unroll {
+  animation: unroll 1.1s cubic-bezier(0.65, 0, 0.35, 1) 0.1s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-unroll {
+    animation: none;
+  }
+}
+
+/* Penanda bab (nav progres gulungan): label muncul saat bab aktif. */
+.chapter-mark {
+  opacity: 0.45;
+  transition:
+    opacity 0.35s ease,
+    color 0.35s ease;
+}
+.chapter-mark[aria-current='true'] {
+  opacity: 1;
+  color: var(--color-vermilion);
+}
+@media (prefers-reduced-motion: reduce) {
+  .chapter-mark {
+    transition: none;
+  }
+}
+
+/* Tahap 4: transisi warna saat toggle tema. Class .theme-fade dipasang sementara di <html>. */
+.theme-fade,
+.theme-fade *,
+.theme-fade *::before,
+.theme-fade *::after {
+  transition-property: background-color, border-color, color, fill, stroke, outline-color, box-shadow !important;
+  transition-duration: 300ms !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-fade,
+  .theme-fade *,
+  .theme-fade *::before,
+  .theme-fade *::after {
+    transition-duration: 0s !important;
+  }
 }

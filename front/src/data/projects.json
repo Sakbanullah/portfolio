@@ -4,7 +4,17 @@
     "summary": "Idempotent webhook receiver for a lending platform: signature verification, deduplication, and retry with backoff. Processes millions of events daily without duplicate ledger entries.",
     "stack": ["Go", "PostgreSQL", "Kafka"],
     "featured": true,
-    "size": { "col": 2, "row": 2 },
+    "size": { "col": 2, "row": 1 },
+    "problem": "Customers were double-posted to the ledger whenever a payment retried — the gateway replays the same webhook and our handler treated it as a new payment.",
+    "rationale": {
+      "why": "The gateway's retry behaviour is out of our control, so correctness had to live on our side of the boundary.",
+      "decisions": [
+        { "choice": "Go", "reason": "High-concurrency handlers with low memory and a single static binary — small, cheap containers." },
+        { "choice": "Kafka", "reason": "Events had to be replayable for backfills, not just consumed once from a queue." },
+        { "choice": "PostgreSQL unique key", "reason": "Deduplication enforced by the database, not application logic — far harder to get wrong." }
+      ]
+    },
+    "impact": "Zero duplicate ledger entries since release, ~2M events per day, and a lighter worker fleet that cut infrastructure cost.",
     "links": { "repo": "https://github.com/example-dev/webhooks", "demo": "" }
   },
   {
@@ -12,6 +22,15 @@
     "summary": "Sliding-window rate limiter middleware backed by Redis, with per-tenant quotas and clear 429 responses.",
     "stack": ["Node.js", "Redis"],
     "size": { "col": 1, "row": 1 },
+    "problem": "One noisy tenant could exhaust the shared API and slow everyone else down; there was no per-client limit at all.",
+    "rationale": {
+      "why": "We needed enforcement in milliseconds at the edge, without adding another database to operate.",
+      "decisions": [
+        { "choice": "Node.js", "reason": "Lived inside the existing gateway process — no new deploy target, reused the team's tooling." },
+        { "choice": "Redis", "reason": "Atomic counters shared across gateway instances; in-memory limits would be wrong behind a load balancer." }
+      ]
+    },
+    "impact": "Removed the noisy-neighbour incidents entirely and turned opaque 500s into explicit 429s that clients can handle.",
     "links": { "repo": "https://github.com/example-dev/rate-limiter", "demo": "" }
   },
   {
@@ -19,13 +38,33 @@
     "summary": "Celery worker setup for image processing and report generation, with per-queue concurrency and dead-letter handling.",
     "stack": ["Python", "Celery", "RabbitMQ"],
     "size": { "col": 2, "row": 1 },
+    "problem": "Image resizing and report generation ran inside request handlers, so slow jobs blocked users and reports were hours late.",
+    "rationale": {
+      "why": "Work was bursty and unequal — a report could take minutes while a thumbnail took a second.",
+      "decisions": [
+        { "choice": "Python", "reason": "The image and report libraries we already depended on were Python; no reason to rewrite the logic." },
+        { "choice": "Celery", "reason": "Per-queue concurrency let slow report jobs run separately from fast image jobs." },
+        { "choice": "RabbitMQ", "reason": "Reliable acknowledgements and a dead-letter path for jobs that fail repeatedly." }
+      ]
+    },
+    "impact": "Report delay dropped from ~12 hours to minutes and API response times no longer depend on the heaviest workload.",
     "links": { "repo": "https://github.com/example-dev/job-worker", "demo": "" }
   },
   {
     "title": "Inventory REST API",
     "summary": "Spring Boot inventory service with optimistic locking, stock reservations, and OpenAPI documentation.",
     "stack": ["Java", "Spring Boot", "PostgreSQL"],
-    "size": { "col": 1, "row": 2 },
+    "size": { "col": 1, "row": 1 },
+    "problem": "Warehouse staff oversold items because two checkouts could decrement the same stock row at the same time.",
+    "rationale": {
+      "why": "The service is owned by a Java team and will be maintained by them after I moved on.",
+      "decisions": [
+        { "choice": "Java + Spring Boot", "reason": "Matched the team's existing skills — handover mattered more than my own language preference." },
+        { "choice": "Optimistic locking", "reason": "Contention is low; retrying a version conflict is cheaper than locking every read." },
+        { "choice": "OpenAPI docs", "reason": "The mobile team integrates directly; generated docs removed back-and-forth." }
+      ]
+    },
+    "impact": "Overselling stopped, and the API is still maintained by the team without my involvement.",
     "links": { "repo": "https://github.com/example-dev/inventory-api", "demo": "" }
   }
 ]

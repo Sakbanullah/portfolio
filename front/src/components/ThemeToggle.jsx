@@ -10,7 +10,7 @@ export default function ThemeToggle() {
       onClick={toggle}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
       title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-      className="grid size-9 place-items-center rounded-full ring-1 ring-sumi/20 transition hover:bg-sumi/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vermilion"
+      className="grid size-9 place-items-center border border-sumi/25 transition hover:bg-sumi/5 active:scale-95 "
     >
       <span aria-hidden="true" className="text-sm">
         {theme === 'dark' ? '☀' : '☾'}
